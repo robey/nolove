@@ -7,6 +7,7 @@
       "target_name": "llvm",
       "type": "<(library)",
       "sources": [
+        "src/context.cpp",
         "src/llvm.cpp"
       ],
       "include_dirs": [
@@ -14,7 +15,8 @@
       ],
       "libraries": [
         "-L<(llvm_home)/lib",
-        "-lLLVMCore"
+        "-lLLVMCore",
+        "-lLLVMSupport"
       ]
     }
   ]

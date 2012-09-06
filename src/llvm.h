@@ -5,10 +5,8 @@
 
 using namespace v8;
 
-namespace NodeLLVM {
-  class LLVM {
-  public:
-    static void init(Handle<Object> target);
-    static Handle<Value> getContext(const Arguments& args);
-  };
-}
+class NodeLLVM {
+public:
+  static void init(Handle<Object> target);
+  static Handle<Value> getGlobalContext(const Arguments& args);
+};
