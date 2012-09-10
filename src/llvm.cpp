@@ -14,7 +14,8 @@ void NodeLLVM::init(Handle<Object> target) {
 }
 
 Handle<Value> NodeLLVM::getGlobalContext(const Arguments& args) {
-  return NodeLContext::create(llvm::getGlobalContext());
+  NodeLContext *c = new NodeLContext(llvm::getGlobalContext());
+  return c->handle_;
 }
 
 extern "C" {

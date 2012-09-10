@@ -7,17 +7,15 @@
 
 using namespace v8;
 
-class NodeLContext : node::ObjectWrap {
-private:
-  llvm::LLVMContext& llvmContext;
+class NodeLContext : public NodeWrapped<NodeLContext, llvm::LLVMContext&> {
+protected:
   int id;
 
-  static NodeProto<NodeLContext> proto;
-
 public:
-  NodeLContext(llvm::LLVMContext& c) : llvmContext(c), id(23) { }
+  static NodeProto<NodeLContext, llvm::LLVMContext&> proto;
+
+  NodeLContext(llvm::LLVMContext& c) : NodeWrapped(c), id(23) { }
 
   static void init();
-  static Handle<Value> create(llvm::LLVMContext& c);
   Handle<Value> newModule(const Arguments& args);
 };

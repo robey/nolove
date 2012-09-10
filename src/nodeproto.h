@@ -19,15 +19,25 @@ public:
   Suitcase(T x) : item(x) { }
 };
 
-template <typename T>
+/**
+ * This is meant to be a static member of a class that pairs with a js
+ * class. The proto defines all the class methods in js, and can create
+ * new js objects with the pairing set up.
+ */
+template <typename T, typename Wrapped>
 class NodeProto {
 public:
   typedef Handle<Value> (T::*Method)(const Arguments& args);
 
-private:
   Persistent<FunctionTemplate> constructor;
 
-public:
+  static Handle<Value> trampoline(const Arguments& args) {
+    Method method = reinterpret_cast<Suitcase<Method> *>(External::Unwrap(args.Data()))->item;
+    // this is a bit evil. manual implementation of node's Unwrap:
+    T *self = static_cast<T *>(args.This()->GetPointerFromInternalField(0));
+    return (self->*method)(args);
+  }
+
   NodeProto(const char *name) {
     Local<FunctionTemplate> f = FunctionTemplate::New();
     constructor = Persistent<FunctionTemplate>::New(f);
@@ -42,18 +52,23 @@ public:
     constructor->InstanceTemplate()->Set(String::NewSymbol(name), f);
   }
 
-  static Handle<Value> trampoline(const Arguments& args) {
-    Method method = reinterpret_cast<Suitcase<Method> *>(External::Unwrap(args.Data()))->item;
-    // this is a bit evil. manual implementation of node's Unwrap:
-    T *self = static_cast<T *>(args.This()->GetPointerFromInternalField(0));
-    return (self->*method)(args);
-  }
-
   void addField(const char *name, Handle<Value> value) {
     constructor->InstanceTemplate()->Set(String::NewSymbol(name), value);
   }
+};
 
-  Local<Object> create() {
-    return constructor->GetFunction()->NewInstance();
+/**
+ * Classes that use NodeProto must also subclass NodeWrapped so they can be
+ * constructed.
+ */
+template <typename T, typename Wrapped>
+class NodeWrapped : public node::ObjectWrap {
+protected:
+  Wrapped wrapped;
+
+  NodeWrapped(Wrapped obj) : wrapped(obj) {
+    Local<Object> jsobj = T::proto.constructor->GetFunction()->NewInstance();
+    Wrap(jsobj);
   }
 };
+
