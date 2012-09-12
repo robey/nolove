@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <v8.h>
 #include <node.h>
 #include "llvm/LLVMContext.h"
@@ -70,5 +71,22 @@ protected:
     Local<Object> jsobj = T::proto.constructor->GetFunction()->NewInstance();
     Wrap(jsobj);
   }
+
+  // helper functions
+
+  Handle<Value> throwError(const std::string& message) {
+    return v8::ThrowException(v8::Exception::Error(v8::String::New(message.c_str())));
+  }
+
+  const char *utf8Arg(const Arguments& args, int index) {
+    v8::String::Utf8Value name(args[index]->ToString());
+    return *name;
+  }
+
+  // return v8::ThrowException(v8::Exception::TypeError(v8::String::New("...")));
+  // -- not of the expected type
+
+
+
 };
 

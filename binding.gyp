@@ -8,7 +8,12 @@
       "type": "<(library)",
       "sources": [
         "src/context.cpp",
-        "src/llvm.cpp"
+        "src/llvm.cpp",
+        "src/module.cpp"
+      ],
+      "defines": [
+        "__STDC_LIMIT_MACROS=1",
+        "__STDC_CONSTANT_MACROS=1"
       ],
       "include_dirs": [
         "<(llvm_home)/include"

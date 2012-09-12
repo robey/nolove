@@ -2,6 +2,7 @@
 #include <node.h>
 #include "llvm.h"
 #include "context.h"
+#include "module.h"
 #include "llvm/LLVMContext.h"
 
 using namespace v8;
@@ -22,6 +23,7 @@ extern "C" {
   static void init(Handle<Object> target) {
     NodeLLVM::init(target);
     NodeLContext::init();
+    NodeLModule::init();
   }
 
   NODE_MODULE(llvm, init);

@@ -1,21 +1,18 @@
 #include <v8.h>
 #include <node.h>
 #include "context.h"
+#include "module.h"
 
 using namespace v8;
 
-NodeProto<NodeLContext, llvm::LLVMContext&> NodeLContext::proto("LLVMContext");
+NodeProto<NodeLContext, llvm::LLVMContext&> NodeLContext::proto("Context");
 
 void NodeLContext::init() {
-  HandleScope scope;
-
   proto.addMethod("newModule", &NodeLContext::newModule);
   proto.addField("msg", String::New("Okay, that worked."));
 }
 
 Handle<Value> NodeLContext::newModule(const Arguments& args) {
-  HandleScope scope;
-  printf("id=%d\n", id);
-  Local<String> rv = String::New("hello from crazy town part 2!");
-  return scope.Close(rv);
+  if (args.Length() < 1) return throwError("Context#newModule requires one string paramater.");
+  return (new NodeLModule(utf8Arg(args, 0), wrapped))->handle_;
 }
