@@ -1,0 +1,19 @@
+{
+  "name": "nodellvm",
+  "version": "1.0.0",
+  "description": "...",
+  "keywords": [ "llvm" ],
+  "author": "Robey Pointer <robeypointer@gmail.com>",
+  "dependencies": {
+    "coffee-script": "*"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
+  "main": "./lib/d16bunny",
+  "files": [
+    "lib"
+  ]
+}
+
