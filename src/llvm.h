@@ -1,12 +1,13 @@
 #pragma once
 
-#include <v8.h>
-#include <node.h>
+#include "nodeproto.h"
 
 using namespace v8;
 
-class NodeLLVM {
+class NodeLLVM : public NodeHelper {
 public:
   static void init(Handle<Object> target);
+
   static Handle<Value> getGlobalContext(const Arguments& args);
+  static Handle<Value> getFunctionType(const Arguments& args);
 };

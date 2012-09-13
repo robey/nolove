@@ -18,4 +18,8 @@ public:
 
   static void init();
   Handle<Value> newModule(const Arguments& args);
+  Handle<Value> newBasicBlock(const Arguments& args);
+
+  // types
+  Handle<Value> getDoubleType(const Arguments& args);
 };

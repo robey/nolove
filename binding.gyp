@@ -8,8 +8,10 @@
       "type": "<(library)",
       "sources": [
         "src/context.cpp",
+        "src/init.cpp",
         "src/llvm.cpp",
-        "src/module.cpp"
+        "src/module.cpp",
+        "src/type.cpp"
       ],
       "defines": [
         "__STDC_LIMIT_MACROS=1",

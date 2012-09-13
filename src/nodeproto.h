@@ -21,6 +21,24 @@ public:
 };
 
 /**
+ * helper functions
+ */
+class NodeHelper {
+public:
+  static Handle<Value> throwError(const std::string& message) {
+    return v8::ThrowException(v8::Exception::Error(v8::String::New(message.c_str())));
+  }
+
+  static const char *utf8Arg(const Arguments& args, int index) {
+    v8::String::Utf8Value name(args[index]->ToString());
+    return *name;
+  }
+
+  // return v8::ThrowException(v8::Exception::TypeError(v8::String::New("...")));
+  // -- not of the expected type
+};
+
+/**
  * This is meant to be a static member of a class that pairs with a js
  * class. The proto defines all the class methods in js, and can create
  * new js objects with the pairing set up.
@@ -63,7 +81,7 @@ public:
  * constructed.
  */
 template <typename T, typename Wrapped>
-class NodeWrapped : public node::ObjectWrap {
+class NodeWrapped : public node::ObjectWrap, public NodeHelper {
 protected:
   Wrapped wrapped;
 
@@ -71,22 +89,5 @@ protected:
     Local<Object> jsobj = T::proto.constructor->GetFunction()->NewInstance();
     Wrap(jsobj);
   }
-
-  // helper functions
-
-  Handle<Value> throwError(const std::string& message) {
-    return v8::ThrowException(v8::Exception::Error(v8::String::New(message.c_str())));
-  }
-
-  const char *utf8Arg(const Arguments& args, int index) {
-    v8::String::Utf8Value name(args[index]->ToString());
-    return *name;
-  }
-
-  // return v8::ThrowException(v8::Exception::TypeError(v8::String::New("...")));
-  // -- not of the expected type
-
-
-
 };
 
