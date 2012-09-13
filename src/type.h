@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unistd.h>
+#include <sstream>
 #include <v8.h>
 #include <node.h>
 #include "llvm/DerivedTypes.h"
@@ -17,6 +18,8 @@ public:
   LAbstractType(Wrapped wrapped) : NodeWrapped<T, Wrapped>(wrapped) { }
 
   Handle<Value> isDoubleType(const Arguments& args);
+  Handle<Value> isFunctionType(const Arguments& args);
+  Handle<Value> toString(const Arguments& args);
 };
 
 class LType : public LAbstractType<LType, const llvm::Type *> {
@@ -38,5 +41,8 @@ public:
     LAbstractType(llvm::FunctionType::get(result, params, isVarArg)) { }
   LFunctionType(const llvm::Type *result, bool isVarArg) :
     LAbstractType(llvm::FunctionType::get(result, isVarArg)) { }
-//  Handle<Value> dump(const Arguments& args);
+
+  Handle<Value> isVarArg(const Arguments& args);
+  Handle<Value> getNumParams(const Arguments& args);
+  Handle<Value> getParamType(const Arguments& args);
 };

@@ -21,14 +21,16 @@ Handle<Value> NodeLLVM::getGlobalContext(const Arguments& args) {
 
 // getFunctionType(result: Type, optional params: Array<Type>, isVarArg: Boolean)
 Handle<Value> NodeLLVM::getFunctionType(const Arguments& args) {
-  if (args.Length() < 2 || args.Length() > 3) {
-    return throwError("getFunctionType requires (result: Type, optional params: Array<Type>, isVarArg: Boolean)");
+  CHECK_ARG_COUNT("getFunctionType", 2, 3, "result: Type, optional params: Array<Type>, isVarArg: Boolean");
+  CHECK_ARG_TYPE(LType, 0);
+  LType *resultType = LType::proto.unwrap(args[0]);
+  if (args[1]->IsArray()) {
+    Handle<Array> params = Handle<Array>::Cast(args[1]);
+    std::vector<const llvm::Type *> paramTypes;
+    CHECK_ARRAY_TYPE(LType, params);
+    unwrapArrayRaw<LType>(params, paramTypes);
+    return (new LFunctionType(resultType->wrapped, paramTypes, args[2]->BooleanValue()))->handle_;
+  } else {
+    return (new LFunctionType(resultType->wrapped, args[1]->BooleanValue()))->handle_;
   }
-
-  // LFunctionType(const llvm::Type *result, const std::vector<const llvm::Type *>& params, bool isVarArg)
-
-//  if (!args[0].IsObject()) {
-//    return thro
-//  }
-  return v8::Undefined();
 }

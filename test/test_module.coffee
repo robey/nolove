@@ -12,10 +12,11 @@ describe "Context", ->
     d = context.getDoubleType()
     ft = llvm.getFunctionType(d, [ d ], false)
     ft.isFunctionType().should.equal(true)
-    ft.isFunctionVarArg().should.equal(false)
-    ft.getFunctionNumParams().should.equal(1)
-    x = ft.getFunctionParamType(0)
+    ft.isVarArg().should.equal(false)
+    ft.getNumParams().should.equal(1)
+    x = ft.getParamType(0)
     x.isDoubleType().should.equal(true)
+    ft.toString().should.eql("<Type double (double)>")
 
 describe "Module", ->
   it "has a name", ->
