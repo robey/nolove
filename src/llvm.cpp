@@ -5,18 +5,13 @@
 using namespace v8;
 
 void NodeLLVM::init(Handle<Object> target) {
-  HandleScope scope;
-
-  Handle<FunctionTemplate> f1 = FunctionTemplate::New(getGlobalContext);
-  target->Set(String::NewSymbol("getGlobalContext"), f1->GetFunction());
-
-  Handle<FunctionTemplate> f2 = FunctionTemplate::New(getFunctionType);
-  target->Set(String::NewSymbol("getFunctionType"), f2->GetFunction());
+  addObjectMethod(target, "getGlobalContext", &getGlobalContext);
+  addObjectMethod(target, "getFunctionType", &getFunctionType);
 }
 
 // getGlobalContext()
 Handle<Value> NodeLLVM::getGlobalContext(const Arguments& args) {
-  return (new NodeLContext(llvm::getGlobalContext()))->handle_;
+  return (new LContext(llvm::getGlobalContext()))->handle_;
 }
 
 // getFunctionType(result: Type, optional params: Array<Type>, isVarArg: Boolean)

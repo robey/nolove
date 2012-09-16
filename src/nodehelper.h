@@ -1,0 +1,80 @@
+#pragma once
+
+#include <string>
+#include <vector>
+#include <v8.h>
+#include <node.h>
+
+using namespace v8;
+
+/**
+ * helper functions
+ */
+class NodeHelper {
+public:
+  static void addObjectMethod(Handle<Object> obj, const char *name, InvocationCallback callback) {
+    Local<FunctionTemplate> f = FunctionTemplate::New(callback);
+    obj->Set(String::NewSymbol(name), f->GetFunction());
+  }
+
+  static void addObjectField(Handle<Object> obj, const char *name, Handle<Value> value) {
+    obj->Set(String::NewSymbol(name), value);
+  }
+
+  static Handle<Value> throwError(const std::string& message) {
+    return ThrowException(Exception::Error(String::New(message.c_str())));
+  }
+
+  static Handle<Value> throwTypeError(const std::string& message) {
+    return ThrowException(Exception::TypeError(String::New(message.c_str())));
+  }
+
+  static const char *utf8Arg(const Arguments& args, int index) {
+    String::Utf8Value name(args[index]->ToString());
+    return *name;
+  }
+
+  static const char *utf8(Handle<String> s) {
+    String::Utf8Value value(s);
+    return *value;
+  }
+
+  template <typename T>
+  static void unwrapArray(Handle<Array> array, std::vector<T *>& vector) {
+    for (unsigned int i = 0; i < array->Length(); i++) {
+      Handle<Value> v = array->Get(i);
+      vector.push_back(T::proto.unwrap(v));
+    }
+  }
+
+  template <typename T, typename Wrapped>
+  static void unwrapArrayRaw(Handle<Array> array, std::vector<Wrapped>& vector) {
+    for (unsigned int i = 0; i < array->Length(); i++) {
+      Handle<Value> v = array->Get(i);
+      vector.push_back(T::proto.unwrap(v)->wrapped);
+    }
+  }
+};
+
+#define CHECK_ARG_COUNT(__name, __min, __max, __desc) \
+  if (args.Length() < (__min) || args.Length() > (__max)) { \
+    return throwError(__name " requires (" __desc ")"); \
+  }
+
+#define CHECK_ARG_TYPE(__type, __n) \
+  if (! __type::proto.hasInstance(args[__n])) { \
+    return throwTypeError(std::string("Argument " #__n " must be of type ") + __type::proto.className); \
+  }
+
+#define CHECK_ARG_NUMBER(__n) \
+  if (! args[__n]->IsNumber()) { \
+    return throwTypeError(std::string("Argument " #__n " must be a number")); \
+  }
+
+#define CHECK_ARRAY_TYPE(__type, __a) \
+  for (unsigned int __i = 0; __i < (__a)->Length(); __i++) { \
+    Handle<Value> __v = (__a)->Get(__i); \
+    if (! __type::proto.hasInstance(__v)) { \
+      return throwTypeError(std::string("Array items must be of type ") + __type::proto.className); \
+    } \
+  }

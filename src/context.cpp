@@ -4,27 +4,30 @@
 
 using namespace v8;
 
-NodeProto<NodeLContext, llvm::LLVMContext&> NodeLContext::proto("Context");
+NodeProto<LContext, llvm::LLVMContext&> LContext::proto("Context");
 
-void NodeLContext::init() {
-  proto.addMethod("newModule", &NodeLContext::newModule);
-  proto.addMethod("newBasicBlock", &NodeLContext::newBasicBlock);
-  proto.addMethod("getDoubleType", &NodeLContext::getDoubleType);
+void LContext::init() {
+  proto.addMethod("newModule", &LContext::newModule);
+  proto.addMethod("newBasicBlock", &LContext::newBasicBlock);
+  proto.addMethod("getDoubleType", &LContext::getDoubleType);
 }
 
 // newModule(name: String)
-Handle<Value> NodeLContext::newModule(const Arguments& args) {
-  if (args.Length() < 1) return throwError("Context#newModule requires one string paramater.");
+Handle<Value> LContext::newModule(const Arguments& args) {
+  CHECK_ARG_COUNT("newModule", 1, 1, "name: String");
   return (new NodeLModule(utf8Arg(args, 0), wrapped))->handle_;
 }
 
 // newBasicBlock(name: String, parent: Function, optional insertBefore: BasicBlock)
-Handle<Value> NodeLContext::newBasicBlock(const Arguments& args) {
-  if (args.Length() < 1) return throwError("Context#newModule requires one string paramater.");
+Handle<Value> LContext::newBasicBlock(const Arguments& args) {
+  CHECK_ARG_COUNT("newBasicBlock", 2, 3, "name: String, parent: Function, optional insertBefore: BasicBlock");
+
+
+
   return (new NodeLModule(utf8Arg(args, 0), wrapped))->handle_;
 }
 
 // getDoubleType()
-Handle<Value> NodeLContext::getDoubleType(const Arguments& args) {
+Handle<Value> LContext::getDoubleType(const Arguments& args) {
   return (new LType(llvm::Type::getDoubleTy(wrapped)))->handle_;
 }

@@ -11,7 +11,7 @@ using namespace v8;
 extern "C" {
   static void init(Handle<Object> target) {
     NodeLLVM::init(target);
-    NodeLContext::init();
+    LContext::init();
     NodeLModule::init();
     LType::init();
     LFunctionType::init();

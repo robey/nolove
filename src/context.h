@@ -7,14 +7,14 @@
 
 using namespace v8;
 
-class NodeLContext : public NodeWrapped<NodeLContext, llvm::LLVMContext&> {
+class LContext : public NodeWrapped<LContext, llvm::LLVMContext&> {
 protected:
   int id;
 
 public:
-  static NodeProto<NodeLContext, llvm::LLVMContext&> proto;
+  static NodeProto<LContext, llvm::LLVMContext&> proto;
 
-  NodeLContext(llvm::LLVMContext& c) : NodeWrapped(c), id(23) { }
+  LContext(llvm::LLVMContext& c) : NodeWrapped(c), id(23) { }
 
   static void init();
   Handle<Value> newModule(const Arguments& args);

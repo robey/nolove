@@ -8,6 +8,8 @@
       "type": "<(library)",
       "sources": [
         "src/context.cpp",
+        "src/function.cpp",
+        "src/globals.cpp",
         "src/init.cpp",
         "src/llvm.cpp",
         "src/module.cpp",

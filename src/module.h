@@ -6,6 +6,7 @@
 #include "llvm/LLVMContext.h"
 #include "llvm/Module.h"
 #include "nodeproto.h"
+#include "type.h"
 
 using namespace v8;
 
@@ -23,4 +24,6 @@ public:
   Handle<Value> getTargetTriple(const Arguments& args);
 
   Handle<Value> dump(const Arguments& args);
+
+  Handle<Value> newFunction(const Arguments& args);
 };

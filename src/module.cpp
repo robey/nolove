@@ -1,6 +1,7 @@
 #include <v8.h>
 #include <node.h>
 #include "module.h"
+#include "function.h"
 
 using namespace v8;
 
@@ -29,6 +30,17 @@ Handle<Value> NodeLModule::getTargetTriple(const Arguments& args) {
 Handle<Value> NodeLModule::dump(const Arguments& args) {
   wrapped->dump();
   return v8::Undefined();
+}
+
+// newFunction(type: FunctionType, linkage: Int, name: String)
+Handle<Value> NodeLModule::newFunction(const Arguments& args) {
+  CHECK_ARG_COUNT("newFunction", 3, 3, "type: FunctionType, linkage: Int, name: String");
+  CHECK_ARG_TYPE(LFunctionType, 0);
+  CHECK_ARG_NUMBER(1);
+  LFunctionType *type = LFunctionType::proto.unwrap(args[0]);
+  unsigned int linkage = (unsigned int) args[1]->ToNumber()->Value();
+  String::Utf8Value name(args[2]->ToString());
+  return (new LFunction(type->wrapped, (llvm::Function::LinkageTypes) linkage, *name, wrapped))->handle_;
 }
 
 /*
