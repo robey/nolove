@@ -5,35 +5,35 @@
 
 using namespace v8;
 
-NodeProto<NodeLModule, llvm::Module *> NodeLModule::proto("Module");
+NodeProto<LModule, llvm::Module *> LModule::proto("Module");
 
-void NodeLModule::init() {
+void LModule::init() {
   proto.addField("msg", String::New("I am a module."));
-  proto.addMethod("getModuleIdentifier", &NodeLModule::getModuleIdentifier);
-  proto.addMethod("getDataLayout", &NodeLModule::getDataLayout);
-  proto.addMethod("getTargetTriple", &NodeLModule::getTargetTriple);
-  proto.addMethod("dump", &NodeLModule::dump);
+  proto.addMethod("getModuleIdentifier", &LModule::getModuleIdentifier);
+  proto.addMethod("getDataLayout", &LModule::getDataLayout);
+  proto.addMethod("getTargetTriple", &LModule::getTargetTriple);
+  proto.addMethod("dump", &LModule::dump);
 }
 
-Handle<Value> NodeLModule::getModuleIdentifier(const Arguments& args) {
+Handle<Value> LModule::getModuleIdentifier(const Arguments& args) {
   return String::New(wrapped->getModuleIdentifier().c_str());
 }
 
-Handle<Value> NodeLModule::getDataLayout(const Arguments& args) {
+Handle<Value> LModule::getDataLayout(const Arguments& args) {
   return String::New(wrapped->getDataLayout().c_str());
 }
 
-Handle<Value> NodeLModule::getTargetTriple(const Arguments& args) {
+Handle<Value> LModule::getTargetTriple(const Arguments& args) {
   return String::New(wrapped->getTargetTriple().c_str());
 }
 
-Handle<Value> NodeLModule::dump(const Arguments& args) {
+Handle<Value> LModule::dump(const Arguments& args) {
   wrapped->dump();
   return v8::Undefined();
 }
 
 // newFunction(type: FunctionType, linkage: Int, name: String)
-Handle<Value> NodeLModule::newFunction(const Arguments& args) {
+Handle<Value> LModule::newFunction(const Arguments& args) {
   CHECK_ARG_COUNT("newFunction", 3, 3, "type: FunctionType, linkage: Int, name: String");
   CHECK_ARG_TYPE(LFunctionType, 0);
   CHECK_ARG_NUMBER(1);

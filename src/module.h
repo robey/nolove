@@ -10,12 +10,12 @@
 
 using namespace v8;
 
-class NodeLModule : public NodeWrapped<NodeLModule, llvm::Module *> {
+class LModule : public NodeWrapped<LModule, llvm::Module *> {
 public:
-  static NodeProto<NodeLModule, llvm::Module *> proto;
+  static NodeProto<LModule, llvm::Module *> proto;
 
-  NodeLModule(const char *name, llvm::LLVMContext &c) : NodeWrapped(new llvm::Module(name, c)) { }
-  virtual ~NodeLModule() { delete wrapped; }
+  LModule(const char *name, llvm::LLVMContext &c) : NodeWrapped(new llvm::Module(name, c)) { }
+  virtual ~LModule() { delete wrapped; }
 
   static void init();
 

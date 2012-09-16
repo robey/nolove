@@ -15,7 +15,7 @@ void LContext::init() {
 // newModule(name: String)
 Handle<Value> LContext::newModule(const Arguments& args) {
   CHECK_ARG_COUNT("newModule", 1, 1, "name: String");
-  return (new NodeLModule(utf8Arg(args, 0), wrapped))->handle_;
+  return (new LModule(utf8Arg(args, 0), wrapped))->handle_;
 }
 
 // newBasicBlock(name: String, parent: Function, optional insertBefore: BasicBlock)
@@ -24,7 +24,7 @@ Handle<Value> LContext::newBasicBlock(const Arguments& args) {
 
 
 
-  return (new NodeLModule(utf8Arg(args, 0), wrapped))->handle_;
+  return (new LModule(utf8Arg(args, 0), wrapped))->handle_;
 }
 
 // getDoubleType()

@@ -12,7 +12,7 @@ extern "C" {
   static void init(Handle<Object> target) {
     NodeLLVM::init(target);
     LContext::init();
-    NodeLModule::init();
+    LModule::init();
     LType::init();
     LFunctionType::init();
   }
