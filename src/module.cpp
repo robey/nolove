@@ -13,6 +13,7 @@ void LModule::init() {
   proto.addMethod("getDataLayout", &LModule::getDataLayout);
   proto.addMethod("getTargetTriple", &LModule::getTargetTriple);
   proto.addMethod("dump", &LModule::dump);
+  proto.addMethod("newFunction", &LModule::newFunction);
 }
 
 Handle<Value> LModule::getModuleIdentifier(const Arguments& args) {

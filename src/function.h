@@ -5,15 +5,16 @@
 #include "llvm/DerivedTypes.h"
 #include "llvm/Function.h"
 #include "nodeproto.h"
+#include "value.h"
 
 using namespace v8;
 
-class LFunction : public NodeWrapped<LFunction, llvm::Function *> {
+class LFunction : public LValue<LFunction, llvm::Function *> {
 public:
   static NodeProto<LFunction, llvm::Function *> proto;
 
   LFunction(llvm::FunctionType *type, llvm::Function::LinkageTypes linkage, const char *name, llvm::Module *module) :
-    NodeWrapped(llvm::Function::Create(type, linkage, name, module)) { }
+    LValue(llvm::Function::Create(type, linkage, name, module)) { }
 
   static void init();
 };
@@ -25,8 +26,6 @@ public:
   LArgument(llvm::Argument& arg) : NodeWrapped(arg) { }
 
   static void init();
-
-  Handle<Value> setName(const Arguments& args);
 };
 
 /*
@@ -41,4 +40,3 @@ public:
     NamedValues[Args[Idx]] = AI;
   }
   */
-  

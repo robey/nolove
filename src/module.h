@@ -15,7 +15,7 @@ public:
   static NodeProto<LModule, llvm::Module *> proto;
 
   LModule(const char *name, llvm::LLVMContext &c) : NodeWrapped(new llvm::Module(name, c)) { }
-  virtual ~LModule() { delete wrapped; }
+  //virtual ~LModule() { delete wrapped; }
 
   static void init();
 

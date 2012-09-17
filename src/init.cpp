@@ -1,5 +1,6 @@
 #include "llvm.h"
 #include "context.h"
+#include "function.h"
 #include "module.h"
 #include "type.h"
 
@@ -12,9 +13,10 @@ extern "C" {
   static void init(Handle<Object> target) {
     NodeLLVM::init(target);
     LContext::init();
+    LFunction::init();
+    LFunctionType::init();
     LModule::init();
     LType::init();
-    LFunctionType::init();
   }
 
   NODE_MODULE(llvm, init);

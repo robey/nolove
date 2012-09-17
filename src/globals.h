@@ -7,6 +7,5 @@ using namespace v8;
 
 class LLinkage : public NodeHelper {
 public:
-  template <typename T, typename Wrapped>
-  static void init(NodeProto<T, Wrapped> proto);
+  static void init(Handle<Object> proto);
 };

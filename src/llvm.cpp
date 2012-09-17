@@ -1,5 +1,6 @@
 #include "llvm.h"
 #include "context.h"
+#include "globals.h"
 #include "type.h"
 
 using namespace v8;
@@ -7,6 +8,10 @@ using namespace v8;
 void NodeLLVM::init(Handle<Object> target) {
   addObjectMethod(target, "getGlobalContext", &getGlobalContext);
   addObjectMethod(target, "getFunctionType", &getFunctionType);
+
+  Handle<Object> linkage = Object::New();
+  LLinkage::init(linkage);
+  addObjectField(target, "Linkage", linkage);
 }
 
 // getGlobalContext()

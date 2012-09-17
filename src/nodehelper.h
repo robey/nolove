@@ -58,7 +58,7 @@ public:
 
 #define CHECK_ARG_COUNT(__name, __min, __max, __desc) \
   if (args.Length() < (__min) || args.Length() > (__max)) { \
-    return throwError(__name " requires (" __desc ")"); \
+    return NodeHelper::throwError(__name " requires (" __desc ")"); \
   }
 
 #define CHECK_ARG_TYPE(__type, __n) \
