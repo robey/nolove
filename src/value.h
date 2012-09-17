@@ -14,11 +14,11 @@ using namespace v8;
  * In LLVM, almost everything descends from this interface.
  */
 template <typename T, typename Wrapped>
-class LValue : public NodeWrapped<T, Wrapped> {
+class LValue : public NodeWrapped<T, Wrapped *> {
 public:
-  static void init(NodeProto<T, Wrapped>& proto);
+  static void init(NodeProto<T, Wrapped *>& proto);
 
-  LValue(Wrapped wrapped) : NodeWrapped<T, Wrapped>(wrapped) { }
+  LValue(Wrapped *wrapped) : NodeWrapped<T, Wrapped *>(wrapped) { }
 
   Handle<Value> getType(const Arguments& args);
   Handle<Value> hasName(const Arguments& args);
@@ -31,7 +31,7 @@ public:
 // c++ has bugs that require template methods to be defined in headers.
 
 template <typename T, typename Wrapped>
-void LValue<T, Wrapped>::init(NodeProto<T, Wrapped>& proto) {
+void LValue<T, Wrapped>::init(NodeProto<T, Wrapped *>& proto) {
   proto.addMethod("getType", &LValue::getType);
   proto.addMethod("hasName", &LValue::hasName);
   proto.addMethod("getName", &LValue::getName);

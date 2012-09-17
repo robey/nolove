@@ -9,7 +9,7 @@
 
 using namespace v8;
 
-class LFunction : public LValue<LFunction, llvm::Function *> {
+class LFunction : public LValue<LFunction, llvm::Function> {
 public:
   static NodeProto<LFunction, llvm::Function *> proto;
 
@@ -21,7 +21,7 @@ public:
   Handle<Value> arguments(const Arguments& args);
 };
 
-class LArgument : public LValue<LArgument, llvm::Argument *> {
+class LArgument : public LValue<LArgument, llvm::Argument> {
 public:
   static NodeProto<LArgument, llvm::Argument *> proto;
 
