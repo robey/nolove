@@ -12,6 +12,7 @@ using namespace v8;
 extern "C" {
   static void init(Handle<Object> target) {
     NodeLLVM::init(target);
+    LArgument::init();
     LContext::init();
     LFunction::init();
     LFunctionType::init();

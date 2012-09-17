@@ -26,13 +26,23 @@ describe "Module", ->
 describe "function", ->
   context = llvm.getGlobalContext()
   module = context.newModule("mymod")
+  double = context.getDoubleType()
 
   it "can get/set a name", ->
-    d = context.getDoubleType()
-    ftype = llvm.getFunctionType(d, [ d ], false)
+    ftype = llvm.getFunctionType(double, [ double ], false)
     f = module.newFunction(ftype, llvm.Linkage.ExternalLinkage, "half")
     f.hasName().should.equal(true)
     f.getName().should.eql("half")
     f.setName("halfsies")
     f.getName().should.eql("halfsies")
     f.toString().should.eql("<Value \ndeclare double @halfsies(double)\n>")
+
+  it "has arguments", ->
+    ftype = llvm.getFunctionType(double, [ double ], false)
+    f = module.newFunction(ftype, llvm.Linkage.ExternalLinkage, "half")
+    f.arguments().length.should.eql(1)
+    f.arguments()[0].hasName().should.equal(false)
+    f.arguments()[0].setName("n")
+    f.arguments()[0].hasName().should.equal(true)
+    f.arguments()[0].getName().should.eql("n")
+    f.arguments()[0].getType().toString().should.eql("<Type double>")

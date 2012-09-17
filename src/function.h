@@ -17,26 +17,15 @@ public:
     LValue(llvm::Function::Create(type, linkage, name, module)) { }
 
   static void init();
+
+  Handle<Value> arguments(const Arguments& args);
 };
 
-class LArgument : public NodeWrapped<LArgument, llvm::Argument&> {
+class LArgument : public LValue<LArgument, llvm::Argument *> {
 public:
-  static NodeProto<LArgument, llvm::Argument&> proto;
+  static NodeProto<LArgument, llvm::Argument *> proto;
 
-  LArgument(llvm::Argument& arg) : NodeWrapped(arg) { }
+  LArgument(llvm::Argument *arg) : LValue(arg) { }
 
   static void init();
 };
-
-/*
-
-  // Set names for all arguments.
-  unsigned Idx = 0;
-  for (Function::arg_iterator AI = F->arg_begin(); Idx != Args.size();
-       ++AI, ++Idx) {
-    AI->setName(Args[Idx]);
-    
-    // Add arguments to variable symbol table.
-    NamedValues[Args[Idx]] = AI;
-  }
-  */
