@@ -17,26 +17,8 @@ class LValue : public NodeWrapped {
 public:
   static NodeProto<LValue> proto;
 
-  struct static_constructor {
-    static_constructor() {
-      proto.addMethod("getType", &LValue::getType);
-      proto.addMethod("hasName", &LValue::hasName);
-      proto.addMethod("getName", &LValue::getName);
-      proto.addMethod("setName", &LValue::setName);
-      proto.addMethod("toString", &LValue::toString);
-    }
-  };
-  static static_constructor __bogus;
+  static void init();
 
-  static void init() {
-/*
-      proto.addMethod("getType", &LValue::getType);
-      proto.addMethod("hasName", &LValue::hasName);
-      proto.addMethod("getName", &LValue::getName);
-      proto.addMethod("setName", &LValue::setName);
-      proto.addMethod("toString", &LValue::toString);
-*/
-  }
   static LValue *create(llvm::Value *v) {
     return createWrapped<LValue>(v);
   }

@@ -3,7 +3,14 @@
 using namespace v8;
 
 NodeProto<LValue> LValue::proto("Value");
-LValue::static_constructor LValue::__bogus;
+
+void LValue::init() {
+  proto.addMethod("getType", &LValue::getType);
+  proto.addMethod("hasName", &LValue::hasName);
+  proto.addMethod("getName", &LValue::getName);
+  proto.addMethod("setName", &LValue::setName);
+  proto.addMethod("toString", &LValue::toString);
+}
 
 Handle<Value> LValue::getType(const Arguments& args) {
   return LType::create(value()->getType())->handle_;

@@ -22,7 +22,7 @@ public:
 
   llvm::Module *module() { return wrapped<llvm::Module>(); }
 
-  //virtual ~LModule() { delete wrapped; }
+  virtual ~LModule() { delete module(); }
 
   Handle<Value> getModuleIdentifier(const Arguments& args);
   Handle<Value> getDataLayout(const Arguments& args);

@@ -14,11 +14,11 @@ void LType::init() {
 }
 
 Handle<Value> LType::isDoubleType(const Arguments& args) {
-  return v8::Boolean::New(type()->isDoubleTy());
+  return Boolean::New(type()->isDoubleTy());
 }
 
 Handle<Value> LType::isFunctionType(const Arguments& args) {
-  return v8::Boolean::New(type()->isFunctionTy());
+  return Boolean::New(type()->isFunctionTy());
 }
 
 Handle<Value> LType::toString(const Arguments& args) {
@@ -26,7 +26,7 @@ Handle<Value> LType::toString(const Arguments& args) {
   llvm::raw_string_ostream os(s);
   type()->print(os);
   os << ">";
-  return v8::String::New(os.str().c_str());
+  return String::New(os.str().c_str());
 }
 
 // ----- LFunctionType
@@ -41,11 +41,11 @@ void LFunctionType::init() {
 }
 
 Handle<Value> LFunctionType::isVarArg(const Arguments& args) {
-  return v8::Boolean::New(functionType()->isVarArg());
+  return Boolean::New(functionType()->isVarArg());
 }
 
 Handle<Value> LFunctionType::getNumParams(const Arguments& args) {
-  return v8::Integer::New(functionType()->getNumParams());
+  return Integer::New(functionType()->getNumParams());
 }
 
 Handle<Value> LFunctionType::getParamType(const Arguments& args) {
