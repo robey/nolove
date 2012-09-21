@@ -27,7 +27,7 @@ public:
  * class. The proto defines all the class methods in js, and can create
  * new js objects with the pairing set up.
  */
-template <typename T, typename Wrapped>
+template <typename T>
 class NodeProto {
 public:
   typedef Handle<Value> (T::*Method)(const Arguments& args);
@@ -46,18 +46,29 @@ public:
     Local<FunctionTemplate> f = FunctionTemplate::New();
     constructor = Persistent<FunctionTemplate>::New(f);
     constructor->SetClassName(String::NewSymbol(name));
-    constructor->InstanceTemplate()->SetInternalFieldCount(1);
+    // slot 0: pointer to our (node-llvm) object, stored by node::ObjectWrap
+    // slot 1: pointer to a libllvm object
+    constructor->InstanceTemplate()->SetInternalFieldCount(2);
   }
 
   void addMethod(const char *name, Method method) {
     // in theory, this is a leak, but it's only done at startup, and needed forever.
     Suitcase<Method> *suitcase = new Suitcase<Method>(method);
     Local<FunctionTemplate> f = FunctionTemplate::New(trampoline, External::Wrap(suitcase));
-    constructor->InstanceTemplate()->Set(String::NewSymbol(name), f);
+    constructor->PrototypeTemplate()->Set(String::NewSymbol(name), f);
   }
 
   void addField(const char *name, Handle<Value> value) {
     constructor->InstanceTemplate()->Set(String::NewSymbol(name), value);
+  }
+
+  Handle<Object> create() {
+    return constructor->GetFunction()->NewInstance();
+  }
+
+  template <typename A>
+  void inherit(NodeProto<A>& superclass) {
+    constructor->Inherit(superclass.constructor);
   }
 
   bool hasInstance(Handle<Value> obj) {
@@ -73,14 +84,18 @@ public:
  * Classes that use NodeProto must also subclass NodeWrapped so they can be
  * constructed.
  */
-template <typename T, typename Wrapped>
 class NodeWrapped : public node::ObjectWrap, public NodeHelper {
 public:
-  Wrapped wrapped;
+  void wrap(Handle<Object> obj, void *native) {
+    Wrap(obj);
+    // note that no attempt is made to free/delete the wrapped references.
+    // we assume llvm is owning its own memory.
+    handle_->SetPointerInInternalField(1, native);
+  }
 
-  NodeWrapped(Wrapped obj) : wrapped(obj) {
-    Local<Object> jsobj = T::proto.constructor->GetFunction()->NewInstance();
-    Wrap(jsobj);
+  template <typename A>
+  A *wrapped() {
+    return static_cast<A *>(handle_->GetPointerFromInternalField(1));
   }
 };
 

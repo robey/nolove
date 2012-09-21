@@ -1,6 +1,7 @@
 #include "llvm.h"
 #include "context.h"
 #include "function.h"
+#include "irbuilder.h"
 #include "module.h"
 #include "type.h"
 
@@ -16,8 +17,10 @@ extern "C" {
     LContext::init();
     LFunction::init();
     LFunctionType::init();
+    LIRBuilder::init();
     LModule::init();
     LType::init();
+    LValue::init();
   }
 
   NODE_MODULE(llvm, init);

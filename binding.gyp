@@ -11,9 +11,11 @@
         "src/function.cpp",
         "src/globals.cpp",
         "src/init.cpp",
+        "src/irbuilder.cpp",
         "src/llvm.cpp",
         "src/module.cpp",
-        "src/type.cpp"
+        "src/type.cpp",
+        "src/value.cpp"
       ],
       "defines": [
         "__STDC_LIMIT_MACROS=1",

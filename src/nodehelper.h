@@ -12,6 +12,13 @@ using namespace v8;
  */
 class NodeHelper {
 public:
+  template <typename T>
+  static T *createWrapped(void *native) {
+    T *myobj = new T();
+    myobj->wrap(T::proto.create(), native);
+    return myobj;
+  }
+
   static void addObjectMethod(Handle<Object> obj, const char *name, InvocationCallback callback) {
     Local<FunctionTemplate> f = FunctionTemplate::New(callback);
     obj->Set(String::NewSymbol(name), f->GetFunction());
@@ -39,6 +46,11 @@ public:
     return *value;
   }
 
+  template <class T>
+  static inline T *unwrapNative(Handle<Object> handle) {
+    return static_cast<T *>(handle->GetPointerFromInternalField(1));
+  }
+
   template <typename T>
   static void unwrapArray(Handle<Array> array, std::vector<T *>& vector) {
     for (unsigned int i = 0; i < array->Length(); i++) {
@@ -47,11 +59,11 @@ public:
     }
   }
 
-  template <typename T, typename Wrapped>
-  static void unwrapArrayRaw(Handle<Array> array, std::vector<Wrapped>& vector) {
+  template <typename A>
+  static void unwrapArrayRaw(Handle<Array> array, std::vector<A *>& vector) {
     for (unsigned int i = 0; i < array->Length(); i++) {
-      Handle<Value> v = array->Get(i);
-      vector.push_back(T::proto.unwrap(v)->wrapped);
+      Handle<Object> obj = array->Get(i)->ToObject();
+      vector.push_back(unwrapNative<A>(obj));
     }
   }
 };

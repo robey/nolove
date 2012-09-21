@@ -10,37 +10,38 @@
 
 using namespace v8;
 
-template <typename T, typename Wrapped>
-class LAbstractType : public NodeWrapped<T, Wrapped> {
+class LType : public NodeWrapped {
 public:
-  static void init(NodeProto<T, Wrapped> proto);
+  static NodeProto<LType> proto;
 
-  LAbstractType(Wrapped wrapped) : NodeWrapped<T, Wrapped>(wrapped) { }
+  static void init();
+
+  static LType *create(const llvm::Type *type) {
+    return createWrapped<LType>(const_cast<llvm::Type *>(type));
+  }
+
+  llvm::Type *type() { return wrapped<llvm::Type>(); }
 
   Handle<Value> isDoubleType(const Arguments& args);
   Handle<Value> isFunctionType(const Arguments& args);
   Handle<Value> toString(const Arguments& args);
 };
 
-class LType : public LAbstractType<LType, const llvm::Type *> {
+class LFunctionType : public LType {
 public:
-  static NodeProto<LType, const llvm::Type *> proto;
+  static NodeProto<LFunctionType> proto;
 
   static void init();
 
-  LType(const llvm::Type *type) : LAbstractType(type) { }
-};
+  static LFunctionType *create(const llvm::Type *result, const std::vector<const llvm::Type *>& params, bool isVarArg) {
+    return createWrapped<LFunctionType>(llvm::FunctionType::get(result, params, isVarArg));
+  }
 
-class LFunctionType : public LAbstractType<LFunctionType, llvm::FunctionType *> {
-public:
-  static NodeProto<LFunctionType, llvm::FunctionType *> proto;
+  static LFunctionType *create(const llvm::Type *result, bool isVarArg) {
+    return createWrapped<LFunctionType>(llvm::FunctionType::get(result, isVarArg));
+  }
 
-  static void init();
-
-  LFunctionType(const llvm::Type *result, const std::vector<const llvm::Type *>& params, bool isVarArg) :
-    LAbstractType(llvm::FunctionType::get(result, params, isVarArg)) { }
-  LFunctionType(const llvm::Type *result, bool isVarArg) :
-    LAbstractType(llvm::FunctionType::get(result, isVarArg)) { }
+  llvm::FunctionType *functionType() { return wrapped<llvm::FunctionType>(); }
 
   Handle<Value> isVarArg(const Arguments& args);
   Handle<Value> getNumParams(const Arguments& args);

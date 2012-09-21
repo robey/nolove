@@ -10,14 +10,19 @@
 
 using namespace v8;
 
-class LModule : public NodeWrapped<LModule, llvm::Module *> {
+class LModule : public NodeWrapped {
 public:
-  static NodeProto<LModule, llvm::Module *> proto;
-
-  LModule(const char *name, llvm::LLVMContext &c) : NodeWrapped(new llvm::Module(name, c)) { }
-  //virtual ~LModule() { delete wrapped; }
+  static NodeProto<LModule> proto;
 
   static void init();
+
+  static LModule *create(const char *name, llvm::LLVMContext *c) {
+    return createWrapped<LModule>(new llvm::Module(name, *c));
+  }
+
+  llvm::Module *module() { return wrapped<llvm::Module>(); }
+
+  //virtual ~LModule() { delete wrapped; }
 
   Handle<Value> getModuleIdentifier(const Arguments& args);
   Handle<Value> getDataLayout(const Arguments& args);

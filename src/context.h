@@ -7,17 +7,20 @@
 
 using namespace v8;
 
-class LContext : public NodeWrapped<LContext, llvm::LLVMContext&> {
-protected:
-  int id;
-
+class LContext : public NodeWrapped {
 public:
-  static NodeProto<LContext, llvm::LLVMContext&> proto;
-
-  LContext(llvm::LLVMContext& c) : NodeWrapped(c), id(23) { }
+  static NodeProto<LContext> proto;
 
   static void init();
+
+  static LContext *create(llvm::LLVMContext* c) {
+    return createWrapped<LContext>(c);
+  }
+
+  llvm::LLVMContext *context() { return wrapped<llvm::LLVMContext>(); }
+
   Handle<Value> newModule(const Arguments& args);
+  Handle<Value> newIRBuilder(const Arguments& args);
   Handle<Value> newBasicBlock(const Arguments& args);
 
   // types

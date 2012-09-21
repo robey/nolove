@@ -1,13 +1,15 @@
 #include "context.h"
+#include "irbuilder.h"
 #include "module.h"
 #include "type.h"
 
 using namespace v8;
 
-NodeProto<LContext, llvm::LLVMContext&> LContext::proto("Context");
+NodeProto<LContext> LContext::proto("Context");
 
 void LContext::init() {
   proto.addMethod("newModule", &LContext::newModule);
+  proto.addMethod("newIRBuilder", &LContext::newIRBuilder);
   proto.addMethod("newBasicBlock", &LContext::newBasicBlock);
   proto.addMethod("getDoubleType", &LContext::getDoubleType);
 }
@@ -15,7 +17,12 @@ void LContext::init() {
 // newModule(name: String)
 Handle<Value> LContext::newModule(const Arguments& args) {
   CHECK_ARG_COUNT("newModule", 1, 1, "name: String");
-  return (new LModule(utf8Arg(args, 0), wrapped))->handle_;
+  return LModule::create(utf8Arg(args, 0), context())->handle_;
+}
+
+// newIRBuilder()
+Handle<Value> LContext::newIRBuilder(const Arguments& args) {
+  return LIRBuilder::create(context())->handle_;
 }
 
 // newBasicBlock(name: String, parent: Function, optional insertBefore: BasicBlock)
@@ -24,10 +31,10 @@ Handle<Value> LContext::newBasicBlock(const Arguments& args) {
 
 
 
-  return (new LModule(utf8Arg(args, 0), wrapped))->handle_;
+  return LModule::create(utf8Arg(args, 0), context())->handle_;
 }
 
 // getDoubleType()
 Handle<Value> LContext::getDoubleType(const Arguments& args) {
-  return (new LType(llvm::Type::getDoubleTy(wrapped)))->handle_;
+  return LType::create(llvm::Type::getDoubleTy(*context()))->handle_;
 }

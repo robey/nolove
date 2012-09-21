@@ -7,20 +7,20 @@ using namespace v8;
 
 // ----- LFunction
 
-NodeProto<LFunction, llvm::Function *> LFunction::proto("Function");
+NodeProto<LFunction> LFunction::proto("Function");
 
 void LFunction::init() {
-  LValue::init(proto);
+  proto.inherit(LValue::proto);
   proto.addMethod("arguments", &LFunction::arguments);
 }
 
 Handle<Value>
 LFunction::arguments(const Arguments& args) {
   HandleScope scope;
-  Local<Array> rv = Array::New(wrapped->arg_size());
+  Local<Array> rv = Array::New(function()->arg_size());
   int index = 0;
-  for (llvm::Function::arg_iterator iter = wrapped->arg_begin(); iter != wrapped->arg_end(); ++iter, ++index) {
-    Handle<Value> item = (new LArgument(&*iter))->handle_;
+  for (llvm::Function::arg_iterator iter = function()->arg_begin(); iter != function()->arg_end(); ++iter, ++index) {
+    Handle<Value> item = LArgument::create(&*iter)->handle_;
     rv->Set(Number::New(index), item);
   }
   return scope.Close(rv);
@@ -28,8 +28,8 @@ LFunction::arguments(const Arguments& args) {
 
 // ----- LArgument
 
-NodeProto<LArgument, llvm::Argument *> LArgument::proto("Argument");
+NodeProto<LArgument> LArgument::proto("Argument");
 
 void LArgument::init() {
-  LValue::init(proto);
+  proto.inherit(LValue::proto);
 }

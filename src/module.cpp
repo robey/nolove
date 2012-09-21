@@ -5,7 +5,7 @@
 
 using namespace v8;
 
-NodeProto<LModule, llvm::Module *> LModule::proto("Module");
+NodeProto<LModule> LModule::proto("Module");
 
 void LModule::init() {
   proto.addField("msg", String::New("I am a module."));
@@ -17,19 +17,19 @@ void LModule::init() {
 }
 
 Handle<Value> LModule::getModuleIdentifier(const Arguments& args) {
-  return String::New(wrapped->getModuleIdentifier().c_str());
+  return String::New(module()->getModuleIdentifier().c_str());
 }
 
 Handle<Value> LModule::getDataLayout(const Arguments& args) {
-  return String::New(wrapped->getDataLayout().c_str());
+  return String::New(module()->getDataLayout().c_str());
 }
 
 Handle<Value> LModule::getTargetTriple(const Arguments& args) {
-  return String::New(wrapped->getTargetTriple().c_str());
+  return String::New(module()->getTargetTriple().c_str());
 }
 
 Handle<Value> LModule::dump(const Arguments& args) {
-  wrapped->dump();
+  module()->dump();
   return v8::Undefined();
 }
 
@@ -40,8 +40,7 @@ Handle<Value> LModule::newFunction(const Arguments& args) {
   CHECK_ARG_NUMBER(1);
   LFunctionType *type = LFunctionType::proto.unwrap(args[0]);
   unsigned int linkage = (unsigned int) args[1]->ToNumber()->Value();
-  String::Utf8Value name(args[2]->ToString());
-  return (new LFunction(type->wrapped, (llvm::Function::LinkageTypes) linkage, *name, wrapped))->handle_;
+  return LFunction::create(type->functionType(), (llvm::Function::LinkageTypes) linkage, utf8Arg(args, 2), module())->handle_;
 }
 
 /*

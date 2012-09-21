@@ -16,7 +16,7 @@ void NodeLLVM::init(Handle<Object> target) {
 
 // getGlobalContext()
 Handle<Value> NodeLLVM::getGlobalContext(const Arguments& args) {
-  return (new LContext(llvm::getGlobalContext()))->handle_;
+  return LContext::create(&(llvm::getGlobalContext()))->handle_;
 }
 
 // getFunctionType(result: Type, optional params: Array<Type>, isVarArg: Boolean)
@@ -28,9 +28,9 @@ Handle<Value> NodeLLVM::getFunctionType(const Arguments& args) {
     Handle<Array> params = Handle<Array>::Cast(args[1]);
     std::vector<const llvm::Type *> paramTypes;
     CHECK_ARRAY_TYPE(LType, params);
-    unwrapArrayRaw<LType>(params, paramTypes);
-    return (new LFunctionType(resultType->wrapped, paramTypes, args[2]->BooleanValue()))->handle_;
+    unwrapArrayRaw(params, paramTypes);
+    return LFunctionType::create(resultType->type(), paramTypes, args[2]->BooleanValue())->handle_;
   } else {
-    return (new LFunctionType(resultType->wrapped, args[1]->BooleanValue()))->handle_;
+    return LFunctionType::create(resultType->type(), args[1]->BooleanValue())->handle_;
   }
 }
