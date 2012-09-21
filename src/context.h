@@ -23,6 +23,9 @@ public:
   Handle<Value> newIRBuilder(const Arguments& args);
   Handle<Value> newBasicBlock(const Arguments& args);
 
+  // constants
+  Handle<Value> getFP(const Arguments& args);
+  
   // types
   Handle<Value> getDoubleType(const Arguments& args);
 };

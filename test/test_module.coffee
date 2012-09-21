@@ -23,7 +23,7 @@ describe "Module", ->
     m = llvm.getGlobalContext().newModule("hullo")
     m.getModuleIdentifier().should.equal("hullo")
 
-describe "function", ->
+describe "Function", ->
   context = llvm.getGlobalContext()
   module = context.newModule("mymod")
   double = context.getDoubleType()
@@ -46,3 +46,26 @@ describe "function", ->
     f.arguments()[0].hasName().should.equal(true)
     f.arguments()[0].getName().should.eql("n")
     f.arguments()[0].getType().toString().should.eql("<Type double>")
+
+describe "IRBuilder", ->
+  context = llvm.getGlobalContext()
+  builder = context.newIRBuilder()
+
+  #   return ConstantFP::get(getGlobalContext(), APFloat(Val));
+
+describe "Constant", ->
+  context = llvm.getGlobalContext()
+  
+  it "can be 0.0", ->
+    n = context.getFP(0.0)
+    n.isZero().should.equal(true)
+    n.isNullValue().should.equal(true) # ???
+    n.isExactlyValue(0.0).should.equal(true)
+    n.isExactlyValue(0.5).should.equal(false)
+
+  it "can be 0.5", ->
+    n = context.getFP(0.5)
+    n.isZero().should.equal(false)
+    n.isNullValue().should.equal(false)
+    n.isExactlyValue(0.0).should.equal(false)
+    n.isExactlyValue(0.5).should.equal(true)

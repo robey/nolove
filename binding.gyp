@@ -7,6 +7,7 @@
       "target_name": "llvm",
       "type": "<(library)",
       "sources": [
+        "src/constant.cpp",
         "src/context.cpp",
         "src/function.cpp",
         "src/globals.cpp",

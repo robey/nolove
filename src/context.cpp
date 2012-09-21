@@ -1,3 +1,4 @@
+#include "constant.h"
 #include "context.h"
 #include "irbuilder.h"
 #include "module.h"
@@ -11,6 +12,7 @@ void LContext::init() {
   proto.addMethod("newModule", &LContext::newModule);
   proto.addMethod("newIRBuilder", &LContext::newIRBuilder);
   proto.addMethod("newBasicBlock", &LContext::newBasicBlock);
+  proto.addMethod("getFP", &LContext::getFP);
   proto.addMethod("getDoubleType", &LContext::getDoubleType);
 }
 
@@ -34,7 +36,16 @@ Handle<Value> LContext::newBasicBlock(const Arguments& args) {
   return LModule::create(utf8Arg(args, 0), context())->handle_;
 }
 
+// getFP(value: Number)
+Handle<Value> LContext::getFP(const Arguments& args) {
+  CHECK_ARG_COUNT("getFP", 1, 1, "value: Number");
+  CHECK_ARG_NUMBER(0);
+  double value = args[0]->ToNumber()->Value();
+  return LConstantFP::create(context(), llvm::APFloat(value))->handle_;
+}
+
 // getDoubleType()
 Handle<Value> LContext::getDoubleType(const Arguments& args) {
   return LType::create(llvm::Type::getDoubleTy(*context()))->handle_;
 }
+

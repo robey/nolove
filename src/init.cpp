@@ -1,4 +1,5 @@
 #include "llvm.h"
+#include "constant.h"
 #include "context.h"
 #include "function.h"
 #include "irbuilder.h"
@@ -14,6 +15,8 @@ extern "C" {
   static void init(Handle<Object> target) {
     NodeLLVM::init(target);
     LArgument::init();
+    LConstant::init();
+    LConstantFP::init();
     LContext::init();
     LFunction::init();
     LFunctionType::init();
