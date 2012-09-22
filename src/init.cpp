@@ -1,8 +1,9 @@
-#include "llvm.h"
+#include "basicblock.h"
 #include "constant.h"
 #include "context.h"
 #include "function.h"
 #include "irbuilder.h"
+#include "llvm.h"
 #include "module.h"
 #include "type.h"
 
@@ -15,6 +16,7 @@ extern "C" {
   static void init(Handle<Object> target) {
     NodeLLVM::init(target);
     LArgument::init();
+    LBasicBlock::init();
     LConstant::init();
     LConstantFP::init();
     LContext::init();

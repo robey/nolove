@@ -2,6 +2,7 @@
 #include <node.h>
 #include "function.h"
 #include "globals.h"
+#include "llvm/Analysis/Verifier.h"
 
 using namespace v8;
 
@@ -12,8 +13,10 @@ NodeProto<LFunction> LFunction::proto("Function");
 void LFunction::init() {
   proto.inherit(LValue::proto);
   proto.addMethod("arguments", &LFunction::arguments);
+  proto.addMethod("verify", &LFunction::verify);
 }
 
+// arguments()
 Handle<Value>
 LFunction::arguments(const Arguments& args) {
   HandleScope scope;
@@ -24,6 +27,14 @@ LFunction::arguments(const Arguments& args) {
     rv->Set(Number::New(index), item);
   }
   return scope.Close(rv);
+}
+
+// verify()
+// -- normally you only want this when testing, since it may abort() on failure to verify.
+Handle<Value>
+LFunction::verify(const Arguments& args) {
+  llvm::verifyFunction(*function());
+  return Undefined();
 }
 
 // ----- LArgument

@@ -1,5 +1,7 @@
+#include "basicblock.h"
 #include "constant.h"
 #include "context.h"
+#include "function.h"
 #include "irbuilder.h"
 #include "module.h"
 #include "type.h"
@@ -30,10 +32,15 @@ Handle<Value> LContext::newIRBuilder(const Arguments& args) {
 // newBasicBlock(name: String, parent: Function, optional insertBefore: BasicBlock)
 Handle<Value> LContext::newBasicBlock(const Arguments& args) {
   CHECK_ARG_COUNT("newBasicBlock", 2, 3, "name: String, parent: Function, optional insertBefore: BasicBlock");
-
-
-
-  return LModule::create(utf8Arg(args, 0), context())->handle_;
+  CHECK_ARG_TYPE(LFunction, 1);
+  LFunction *parent = LFunction::proto.unwrap(args[1]);
+  if (args.Length() > 2) {
+    CHECK_ARG_TYPE(LBasicBlock, 2);
+    LBasicBlock *insertBefore = LBasicBlock::proto.unwrap(args[2]);
+    return LBasicBlock::create(context(), utf8Arg(args, 0), parent->function(), insertBefore->block())->handle_;
+  } else {
+    return LBasicBlock::create(context(), utf8Arg(args, 0), parent->function())->handle_;
+  }
 }
 
 // getFP(value: Number)

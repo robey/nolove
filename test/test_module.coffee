@@ -77,8 +77,27 @@ describe "IRBuilder", ->
 
   it "can make a doubler function", ->
     ftype = llvm.getFunctionType(double, [ double ], false)
-    f = module.newFunction(ftype, llvm.Linkage.ExternalLinkage, "double")
+    f = module.newFunction(ftype, llvm.Linkage.ExternalLinkage, "twice")
     f.arguments()[0].setName("n")
     two = context.getFP(2.0)
     op = builder.createFMul(f.arguments()[0], two, "times2")
     op.toString().should.equal("<Value   %times2 = fmul double %n, 2.000000e+00>")
+
+describe "complete Function with code", ->
+  context = llvm.getGlobalContext()
+  module = context.newModule("mymod")
+  builder = context.newIRBuilder()
+  double = context.getDoubleType()
+
+  it "can verify", ->
+    ftype = llvm.getFunctionType(double, [ double ], false)
+    f = module.newFunction(ftype, llvm.Linkage.ExternalLinkage, "twice")
+    f.arguments()[0].setName("n")
+    block = context.newBasicBlock("entry", f)
+    builder.setInsertPoint(block)
+    op = builder.createFMul(f.arguments()[0], context.getFP(2.0), "times2")
+    builder.createRet(op)
+    f.verify()
+
+
+

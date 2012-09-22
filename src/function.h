@@ -22,6 +22,7 @@ public:
   llvm::Function *function() { return wrapped<llvm::Function>(); }
 
   Handle<Value> arguments(const Arguments& args);
+  Handle<Value> verify(const Arguments& args);
 };
 
 class LArgument : public LValue {

@@ -7,11 +7,13 @@
       "target_name": "llvm",
       "type": "<(library)",
       "sources": [
+        "src/basicblock.cpp",
         "src/constant.cpp",
         "src/context.cpp",
         "src/function.cpp",
         "src/globals.cpp",
         "src/init.cpp",
+        "src/instruction.cpp",
         "src/irbuilder.cpp",
         "src/llvm.cpp",
         "src/module.cpp",
