@@ -47,12 +47,6 @@ describe "Function", ->
     f.arguments()[0].getName().should.eql("n")
     f.arguments()[0].getType().toString().should.eql("<Type double>")
 
-describe "IRBuilder", ->
-  context = llvm.getGlobalContext()
-  builder = context.newIRBuilder()
-
-  #   return ConstantFP::get(getGlobalContext(), APFloat(Val));
-
 describe "Constant", ->
   context = llvm.getGlobalContext()
   
@@ -69,3 +63,22 @@ describe "Constant", ->
     n.isNullValue().should.equal(false)
     n.isExactlyValue(0.0).should.equal(false)
     n.isExactlyValue(0.5).should.equal(true)
+
+describe "IRBuilder", ->
+  context = llvm.getGlobalContext()
+  module = context.newModule("mymod")
+  builder = context.newIRBuilder()
+  double = context.getDoubleType()
+
+  it "can multiply", ->
+    two = context.getFP(2.0)
+    op = builder.createFMul(two, two, "2x2")
+    op.getType().toString().should.equal("<Type double>")
+
+  it "can make a doubler function", ->
+    ftype = llvm.getFunctionType(double, [ double ], false)
+    f = module.newFunction(ftype, llvm.Linkage.ExternalLinkage, "double")
+    f.arguments()[0].setName("n")
+    two = context.getFP(2.0)
+    op = builder.createFMul(f.arguments()[0], two, "times2")
+    op.toString().should.equal("<Value   %times2 = fmul double %n, 2.000000e+00>")
