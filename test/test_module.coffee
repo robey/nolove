@@ -85,11 +85,11 @@ describe "IRBuilder", ->
 
 describe "complete Function with code", ->
   context = llvm.getGlobalContext()
-  module = context.newModule("mymod")
   builder = context.newIRBuilder()
   double = context.getDoubleType()
 
-  it "can verify", ->
+  buildFunction = ->
+    module = context.newModule("mymod")
     ftype = llvm.getFunctionType(double, [ double ], false)
     f = module.newFunction(ftype, llvm.Linkage.ExternalLinkage, "twice")
     f.arguments()[0].setName("n")
@@ -97,7 +97,18 @@ describe "complete Function with code", ->
     builder.setInsertPoint(block)
     op = builder.createFMul(f.arguments()[0], context.getFP(2.0), "times2")
     builder.createRet(op)
+    [ module, f ]
+
+  it "can verify", ->
+    [ module, f ] = buildFunction()
     f.verify()
+    console.log "\n\n"
+    module.dump()
+    console.log "\n\n"
 
-
+  it "can compile", ->
+    [ module, f ] = buildFunction()
+    engine = module.newExecutionEngine()
+#    console.log 
+    engine.getTargetData()
 

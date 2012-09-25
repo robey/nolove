@@ -1,5 +1,6 @@
 #include <v8.h>
 #include <node.h>
+#include "executionengine.h"
 #include "module.h"
 #include "function.h"
 
@@ -14,6 +15,7 @@ void LModule::init() {
   proto.addMethod("getTargetTriple", &LModule::getTargetTriple);
   proto.addMethod("dump", &LModule::dump);
   proto.addMethod("newFunction", &LModule::newFunction);
+  proto.addMethod("newExecutionEngine", &LModule::newExecutionEngine);
 }
 
 Handle<Value> LModule::getModuleIdentifier(const Arguments& args) {
@@ -43,6 +45,11 @@ Handle<Value> LModule::newFunction(const Arguments& args) {
   return LFunction::create(type->functionType(), (llvm::Function::LinkageTypes) linkage, utf8Arg(args, 2), module())->handle_;
 }
 
+// newExecutionEngine()
+Handle<Value> LModule::newExecutionEngine(const Arguments& args) {
+  return LExecutionEngine::create(module())->handle_;
+}
+
 /*
 Endianness   getEndianness () const
    Target endian information. 
@@ -51,32 +58,3 @@ PointerSize   getPointerSize () const
 LLVMContext &   getContext () const
 const std::string &   getModuleInlineAsm () const
 */
-
-
-
-/*
-Function *FunctionAST::Codegen() {
-  NamedValues.clear();
-  
-  Function *TheFunction = Proto->Codegen();
-  if (TheFunction == 0)
-    return 0;
-  
-  // Create a new basic block to start insertion into.
-  BasicBlock *BB = BasicBlock::Create(getGlobalContext(), "entry", TheFunction);
-  Builder.SetInsertPoint(BB);
-  
-  if (Value *RetVal = Body->Codegen()) {
-    // Finish off the function.
-    Builder.CreateRet(RetVal);
-
-    // Validate the generated code, checking for consistency.
-    verifyFunction(*TheFunction);
-
-    return TheFunction;
-  }
-  
-  // Error reading body, remove function.
-  TheFunction->eraseFromParent();
-  return 0;
-}*/
