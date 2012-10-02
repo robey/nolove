@@ -6,6 +6,7 @@
 #include "irbuilder.h"
 #include "llvm.h"
 #include "module.h"
+#include "nativecallable.h"
 #include "passmanager.h"
 #include "type.h"
 
@@ -41,6 +42,7 @@ extern "C" {
     LTargetData::init();
     LType::init();
     LValue::init();
+    NativeCallable::init();
   }
 
   NODE_MODULE(llvm, init);

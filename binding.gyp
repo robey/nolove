@@ -18,6 +18,7 @@
         "src/irbuilder.cpp",
         "src/llvm.cpp",
         "src/module.cpp",
+        "src/nativecallable.cpp",
         "src/passmanager.cpp",
         "src/type.cpp",
         "src/value.cpp"
