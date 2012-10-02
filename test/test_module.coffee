@@ -113,6 +113,6 @@ describe "complete Function with code", ->
     manager.add(engine.getTargetData())
     manager.add(llvm.createBasicAliasAnalysisPass())
     manager.doInitialization()
-    engine.getPointerToFunction(f)
-    console.log engine.getTargetData().toString()
+    native_function = engine.getPointerToFunction(f)
+    native_function.call_d2d(10.0).should.eql(20.0)
 
