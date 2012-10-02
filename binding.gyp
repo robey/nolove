@@ -30,28 +30,8 @@
         "<(llvm_home)/include"
       ],
       "libraries": [
-        "-L<(llvm_home)/lib",
-        "-lLLVMJIT",
-        "-lLLVMExecutionEngine",
-        "-lLLVMX86Disassembler",
-        "-lLLVMX86AsmParser",
-        "-lLLVMX86CodeGen",
-        "-lLLVMSelectionDAG",
-        "-lLLVMAsmPrinter",
-        "-lLLVMMCParser",
-        "-lLLVMCodeGen",
-        "-lLLVMScalarOpts",
-        "-lLLVMInstCombine",
-        "-lLLVMTransformUtils",
-        "-lLLVMipa",
-        "-lLLVMAnalysis",
-        "-lLLVMTarget",
-        "-lLLVMX86AsmPrinter",
-        "-lLLVMX86Utils",
-        "-lLLVMX86Info",
-        "-lLLVMMC",
-        "-lLLVMCore",
-        "-lLLVMSupport"
+        "<!@(llvm-config --ldflags)",
+        "<!@(llvm-config --libs core jit native)"
       ]
     }
   ]
