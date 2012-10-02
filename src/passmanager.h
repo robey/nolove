@@ -33,6 +33,8 @@ public:
   }
 
   llvm::TargetData *targetData() { return wrapped<llvm::TargetData>(); }
+
+  Handle<Value> toString(const Arguments& args);
 };
 
 class LFunctionPassManager : public NodeWrapped {
@@ -49,4 +51,20 @@ public:
   llvm::FunctionPassManager *functionPassManager() { return wrapped<llvm::FunctionPassManager>(); }
 
   Handle<Value> add(const Arguments& args);
+  Handle<Value> doInitialization(const Arguments& args);
 };
+
+
+/*
+  // Do simple "peephole" optimizations and bit-twiddling optzns.
+  OurFPM.add(createInstructionCombiningPass());
+  // Reassociate expressions.
+  OurFPM.add(createReassociatePass());
+  // Eliminate Common SubExpressions.
+  OurFPM.add(createGVNPass());
+  // Simplify the control flow graph (deleting unreachable blocks, etc).
+  OurFPM.add(createCFGSimplificationPass());
+
+
+  */
+

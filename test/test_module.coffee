@@ -109,6 +109,10 @@ describe "complete Function with code", ->
   it "can compile", ->
     [ module, f ] = buildFunction()
     engine = module.newExecutionEngine()
-#    console.log 
-    engine.getTargetData()
+    manager = module.newFunctionPassManager()
+    manager.add(engine.getTargetData())
+    manager.add(llvm.createBasicAliasAnalysisPass())
+    manager.doInitialization()
+    engine.getPointerToFunction(f)
+    console.log engine.getTargetData().toString()
 

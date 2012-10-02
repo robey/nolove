@@ -31,6 +31,6 @@ public:
   Handle<Value> dump(const Arguments& args);
 
   Handle<Value> newFunction(const Arguments& args);
-
   Handle<Value> newExecutionEngine(const Arguments& args);
+  Handle<Value> newFunctionPassManager(const Arguments& args);
 };

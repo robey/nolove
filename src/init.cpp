@@ -9,6 +9,12 @@
 #include "passmanager.h"
 #include "type.h"
 
+#include "llvm/Target/TargetData.h"
+#include "llvm/Support/TargetSelect.h"
+// warning! the following line is mandatory, even though the library will compile without it.
+// it magically makes ExecutionEngine work.
+#include "llvm/ExecutionEngine/JIT.h"
+
 using namespace v8;
 
 /*
@@ -16,6 +22,9 @@ using namespace v8;
  */
 extern "C" {
   static void init(Handle<Object> target) {
+    // llvm itself requires initialization.
+    llvm::InitializeNativeTarget();
+
     NodeLLVM::init(target);
     LArgument::init();
     LBasicBlock::init();

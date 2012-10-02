@@ -3,6 +3,7 @@
 #include "executionengine.h"
 #include "module.h"
 #include "function.h"
+#include "passmanager.h"
 
 using namespace v8;
 
@@ -16,6 +17,7 @@ void LModule::init() {
   proto.addMethod("dump", &LModule::dump);
   proto.addMethod("newFunction", &LModule::newFunction);
   proto.addMethod("newExecutionEngine", &LModule::newExecutionEngine);
+  proto.addMethod("newFunctionPassManager", &LModule::newFunctionPassManager);
 }
 
 Handle<Value> LModule::getModuleIdentifier(const Arguments& args) {
@@ -48,6 +50,10 @@ Handle<Value> LModule::newFunction(const Arguments& args) {
 // newExecutionEngine()
 Handle<Value> LModule::newExecutionEngine(const Arguments& args) {
   return LExecutionEngine::create(module())->handle_;
+}
+
+Handle<Value> LModule::newFunctionPassManager(const Arguments& args) {
+  return LFunctionPassManager::create(module())-> handle_;
 }
 
 /*

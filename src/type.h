@@ -3,6 +3,7 @@
 #include <sstream>
 #include <v8.h>
 #include <node.h>
+#include "llvm/ADT/ArrayRef.h"
 #include "llvm/DerivedTypes.h"
 #include "llvm/Function.h"
 #include "nodeproto.h"
@@ -32,11 +33,11 @@ public:
 
   static void init();
 
-  static LFunctionType *create(const llvm::Type *result, const std::vector<const llvm::Type *>& params, bool isVarArg) {
+  static LFunctionType *create(llvm::Type *result, const std::vector<llvm::Type *>& params, bool isVarArg) {
     return createWrapped<LFunctionType>(llvm::FunctionType::get(result, params, isVarArg));
   }
 
-  static LFunctionType *create(const llvm::Type *result, bool isVarArg) {
+  static LFunctionType *create(llvm::Type *result, bool isVarArg) {
     return createWrapped<LFunctionType>(llvm::FunctionType::get(result, isVarArg));
   }
 

@@ -26,7 +26,5 @@ LExecutionEngine::getPointerToFunction(const Arguments& args) {
 // getTargetData()
 Handle<Value>
 LExecutionEngine::getTargetData(const Arguments& args) {
-  const llvm::TargetData *x = executionEngine()->getTargetData();
-//  printf("wut %x\n", x);
-  return LTargetData::create(NULL)->handle_; //new llvm::TargetData(*executionEngine()->getTargetData()))->handle_;
+  return LTargetData::create(new llvm::TargetData(*executionEngine()->getTargetData()))->handle_;
 }

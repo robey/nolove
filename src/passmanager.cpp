@@ -16,6 +16,12 @@ void LPass::init() {
 NodeProto<LTargetData> LTargetData::proto("TargetData");
 
 void LTargetData::init() {
+  proto.inherit(LPass::proto);
+  proto.addMethod("toString", &LTargetData::toString);
+}
+
+Handle<Value> LTargetData::toString(const Arguments& args) {
+  return String::New(targetData()->getStringRepresentation().c_str());
 }
 
 // ----- LFunctionPassManager
@@ -24,6 +30,7 @@ NodeProto<LFunctionPassManager> LFunctionPassManager::proto("FunctionPassManager
 
 void LFunctionPassManager::init() {
   proto.addMethod("add", &LFunctionPassManager::add);
+  proto.addMethod("doInitialization", &LFunctionPassManager::doInitialization);
 }
 
 // getPointerToFunction(function: Function)
@@ -34,4 +41,10 @@ LFunctionPassManager::add(const Arguments& args) {
   LPass *pass = LPass::proto.unwrap(args[0]);
   functionPassManager()->add(pass->pass());
   return Undefined();
+}
+
+// doInitialization()
+Handle<Value>
+LFunctionPassManager::doInitialization(const Arguments& args) {
+  return Boolean::New(functionPassManager()->doInitialization());
 }
