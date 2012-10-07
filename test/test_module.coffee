@@ -1,5 +1,5 @@
 should = require 'should'
-llvm = require '../build/Release/llvm'
+llvm = require '../build/Release/nolove'
 
 describe "Context", ->
   context = llvm.getGlobalContext()

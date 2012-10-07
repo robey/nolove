@@ -45,5 +45,5 @@ extern "C" {
     NativeCallable::init();
   }
 
-  NODE_MODULE(llvm, init);
+  NODE_MODULE(nolove, init);
 }

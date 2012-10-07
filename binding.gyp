@@ -4,7 +4,7 @@
   },
   "targets": [
     {
-      "target_name": "llvm",
+      "target_name": "nolove",
       "type": "<(library)",
       "sources": [
         "src/basicblock.cpp",

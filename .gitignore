@@ -1,3 +1,4 @@
-llvm.sublime-project
-llvm.sublime-workspace
+nolove.sublime-project
+nolove.sublime-workspace
 build/
+node_modules/
