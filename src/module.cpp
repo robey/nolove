@@ -33,8 +33,10 @@ Handle<Value> LModule::getTargetTriple(const Arguments& args) {
 }
 
 Handle<Value> LModule::dump(const Arguments& args) {
-  module()->dump();
-  return v8::Undefined();
+  std::string s;
+  llvm::raw_string_ostream os(s);
+  module()->print(os, NULL);
+  return String::New(os.str().c_str());
 }
 
 // newFunction(type: FunctionType, linkage: Int, name: String)

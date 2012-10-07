@@ -102,9 +102,9 @@ describe "complete Function with code", ->
   it "can verify", ->
     [ module, f ] = buildFunction()
     f.verify()
-    console.log "\n\n"
-    module.dump()
-    console.log "\n\n"
+    module.dump().should.match(/define double @twice/)
+    module.dump().should.match(/%times2 = fmul double %n, 2.0/)
+    module.dump().should.match(/ret double %times2/)
 
   it "can compile", ->
     [ module, f ] = buildFunction()
