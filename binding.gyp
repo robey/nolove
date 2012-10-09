@@ -1,6 +1,7 @@
 {
   "variables": {
-    "llvm_home": "/Users/robey/llvm"
+    "llvm_home": "/usr/local/llvm",
+    "llvm_config": "<(llvm_home)/bin/llvm-config"
   },
   "targets": [
     {
@@ -28,11 +29,11 @@
         "__STDC_CONSTANT_MACROS=1"
       ],
       "include_dirs": [
-        "<(llvm_home)/include"
+        "<!@(<(llvm_config) --includedir)"
       ],
       "libraries": [
-        "<!@(llvm-config --ldflags)",
-        "<!@(llvm-config --libs core jit native)"
+        "<!@(<(llvm_config) --ldflags)",
+        "<!@(<(llvm_config) --libs core jit native)"
       ]
     }
   ]
