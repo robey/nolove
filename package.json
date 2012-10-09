@@ -13,5 +13,8 @@
   },
   "files": [
     "src"
-  ]
+  ],
+  "scripts": {
+    "preinstall": "node-gyp rebuild --llvm-home=$LLVM_HOME"
+  }
 }
